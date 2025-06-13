@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 
 let users = [
     // To create an admin, manually add one here before starting the server
-    // { id: 1, name: 'Admin', email: 'admin@example.com', password: 'hashed_admin_password', role: 'admin' }
+    { id: 1, name: 'Admin', email: 'admin@example.com', password: '$2a$10$JYOzQwlx8dG3EKNsKxQ9L.vUpjADrAZIb7VvD9EZU5pyGCzNlYFvO', role: 'admin' }
 ];
 let nextId = users.length + 1;
 
