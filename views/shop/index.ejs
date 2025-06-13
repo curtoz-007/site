@@ -1,0 +1,130 @@
+<!-- Section 1: Hero Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <!-- Left Text Column -->
+            <div class="col-lg-6" data-aos="fade-right">
+                <h1 class="display-3 fw-bolder">Elevate Your Everyday.</h1>
+                <p class="lead text-muted my-4">Discover a curated collection of objects designed with purpose and crafted with passion. Where modern design meets timeless quality.</p>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="hero-avatars">
+                        <img src="/images/customer1.jpg" alt="Customer 1">
+                        <img src="/images/customer2.jpg" alt="Customer 2">
+                        <img src="/images/customer3.jpg" alt="Customer 3">
+                    </div>
+                    <div class="ms-3">
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                        </div>
+                        <div class="text-muted small">Trusted by 10,000+ happy customers</div>
+                    </div>
+                </div>
+                <a href="#featured-products" class="btn btn-primary btn-lg px-4">Explore Products</a>
+            </div>
+            <!-- Right Image Column -->
+            <div class="col-lg-6" data-aos="fade-left">
+                <img src="/images/hero-product.jpg" alt="Featured Product" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 2: Scrolling Logo Ticker -->
+<div class="py-5" style="overflow-x: hidden;">
+    <div class="scrolling-logos">
+        <% for(let i = 0; i < 2; i++) { %> <!-- Loop twice for a seamless scroll -->
+            <div class="logo-item"><img src="/images/logos/forbes.png" alt="Forbes" height="25" class="logo-bar"></div>
+            <div class="logo-item"><img src="/images/logos/vogue.png" alt="Vogue" height="30" class="logo-bar"></div>
+            <div class="logo-item"><img src="/images/logos/techcrunch.png" alt="TechCrunch" height="25" class="logo-bar"></div>
+            <div class="logo-item"><img src="/images/logos/wired.png" alt="Wired" height="30" class="logo-bar"></div>
+            <div class="logo-item"><img src="/images/logos/forbes.png" alt="Forbes" height="25" class="logo-bar"></div> <!-- Repeat for seamlessness -->
+            <div class="logo-item"><img src="/images/logos/github.png" alt="Github" height="25" class="logo-bar"></div> <!-- Repeat for seamlessness -->
+        <% } %>
+    </div>
+</div>
+
+<!-- Section 3: Shop by Category -->
+<section id="categories" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>Start Your Journey</h2>
+            <p class="lead text-muted">Find what you need by browsing our curated categories.</p>
+        </div>
+        <div class="row g-4">
+            <!-- These would be dynamically generated from your categories -->
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100"><a href="#" class="text-decoration-none"><div class="category-card" style="background-image: url('/images/plugin-cat.png');"><div class="category-card-overlay"><h4>Plugins</h4></div></div></a></div>
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200"><a href="#" class="text-decoration-none"><div class="category-card" style="background-image: url('/images/web-cat.png');"><div class="category-card-overlay"><h4>Web</h4></div></div></a></div>
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300"><a href="#" class="text-decoration-none"><div class="category-card" style="background-image: url('/images/gamepass-cat.jpg');"><div class="category-card-overlay"><h4>Game Pass</h4></div></div></a></div>
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400"><a href="#" class="text-decoration-none"><div class="category-card" style="background-image: url('/images/other-cat.jpg');"><div class="category-card-overlay"><h4>Others</h4></div></div></a></div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 4: Our Brand Story -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6" data-aos="fade-right">
+                <img src="/images/brand-story.jpg" class="brand-story-img shadow-lg">
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <h6 class="text-primary text-uppercase">Our Philosophy</h6>
+                <h2 class="display-5 fw-bolder">Designed for Life, Not Just for Looks.</h2>
+                <p class="text-muted mt-3">We believe that the objects we surround ourselves with should do more than just fill a space. They should inspire, simplify, and bring a quiet joy to our daily routines. That's why every product in our collection is chosen for its thoughtful design, superior materials, and lasting quality.</p>
+                <a href="#" class="btn btn-outline-dark mt-3">Learn More About Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 5: Featured Products -->
+<section id="featured-products" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>Freshly Curated</h2>
+            <p class="lead text-muted">Check out our latest arrivals, hand-picked for you.</p>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <% products.slice(0, 4).forEach((product, index) => { %> <!-- Show the first 4 products -->
+                <div class="col" data-aos="fade-up" data-aos-delay="<%= 100 * index %>">
+                    <div class="card product-card h-100 shadow-sm border-0">
+                        <!-- Add "New" badge for the very first product -->
+                        <% if (index === 0) { %>
+                            <div class="new-badge">NEW</div>
+                        <% } %>
+                        <a href="/product/<%= product.id %>" class="text-decoration-none">
+                            <img src="<%= product.imageUrl %>" class="card-img-top" alt="<%= product.name %>">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate"><a href="/product/<%= product.id %>" class="text-dark text-decoration-none"><%= product.name %></a></h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="card-text fs-5 fw-bold mb-0">$<%= product.price.toFixed(2) %></p>
+                                <form action="/cart/add/<%= product.id %>" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-primary rounded-pill"><i class="bi bi-cart-plus"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<!-- Section 6: Newsletter CTA -->
+<section class="py-5 newsletter-section">
+    <div class="container text-center" data-aos="fade-up">
+        <h2 class="fw-bold">Join the Design List</h2>
+        <p class="lead mb-4">Get exclusive access to new products, special offers, and design insights.</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <form action="#" method="POST">
+                    <div class="input-group input-group-lg">
+                        <input type="email" class="form-control" placeholder="Enter your email address" required>
+                        <button class="btn btn-light" type="submit">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

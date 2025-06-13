@@ -1,0 +1,77 @@
+<h2 class="mb-4">Manage Coupons</h2>
+
+<!-- Add New Coupon Form -->
+<div class="card mb-5">
+    <div class="card-header">Add New Coupon</div>
+    <div class="card-body">
+        <form action="/admin/coupons/add" method="POST">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="code" class="form-label">Coupon Code</label>
+                    <!-- 'name' attribute must match the server-side variable -->
+                    <input type="text" class="form-control" id="code" name="code" required style="text-transform: uppercase;">
+                </div>
+                <div class="col-md-3">
+                    <label for="discount_type" class="form-label">Discount Type</label>
+                    <!-- Corrected name="discount_type" -->
+                    <select class="form-select" id="discount_type" name="discount_type">
+                        <option value="percentage">Percentage (%)</option>
+                        <option value="fixed">Fixed Amount ($)</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="discount_value" class="form-label">Value</label>
+                    <!-- Corrected name="discount_value" -->
+                    <input type="number" class="form-control" id="discount_value" name="discount_value" step="0.01" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="expiry_date" class="form-label">Expiry Date</label>
+                    <!-- Corrected name="expiry_date" -->
+                    <input type="date" class="form-control" id="expiry_date" name="expiry_date" required>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Existing Coupons Table -->
+<h3 class="mb-3">Existing Coupons</h3>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Value</th>
+                <th>Expires</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% coupons.forEach(coupon => { %>
+                <tr>
+                    <td><code><%= coupon.code %></code></td>
+                    <td><%= coupon.discount_type %></td>
+                    <td>
+                        <% if (coupon.discount_type === 'percentage') { %>
+                            <%= coupon.discount_value %>%
+                        <% } else { %>
+                            $<%= coupon.discount_value.toFixed(2) %>
+                        <% } %>
+                    </td>
+                    <td><%= new Date(coupon.expiry_date).toLocaleDateString() %></td>
+                    <td>
+                        <% if (coupon.is_active) { %>
+                            <span class="badge bg-success">Yes</span>
+                        <% } else { %>
+                            <span class="badge bg-danger">No</span>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,183 @@
+<!-- views/shop/product-detail.ejs -->
+
+<!-- Product Details Section -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <img src="<%= product.imageUrl %>" class="img-fluid rounded shadow-sm" alt="<%= product.name %>">
+    </div>
+    <div class="col-md-6">
+        <h1 class="display-5"><%= product.name %></h1>
+        
+        <div class="d-flex align-items-center mb-3">
+            <% if (ratingCount > 0) { %>
+                <div class="text-warning">
+                    <% for(let i = 1; i <= 5; i++) { %>
+                        <% if (i <= avgRating) { %><i class="bi bi-star-fill"></i><% } else if (i - 0.5 <= avgRating) { %><i class="bi bi-star-half"></i><% } else { %><i class="bi bi-star"></i><% } %>
+                    <% } %>
+                </div>
+                <span class="ms-2 text-muted">(<%= ratingCount %> <%= ratingCount === 1 ? 'review' : 'reviews' %>)</span>
+            <% } else { %>
+                <span class="text-muted">No reviews yet.</span>
+            <% } %>
+        </div>
+
+        <h2 class="my-4">$<%= product.price.toFixed(2) %></h2>
+        <p class="lead"><%= product.description %></p>
+        <hr>
+        <form action="/cart/add/<%= product.id %>" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-cart-plus"></i> Add to Cart</button>
+        </form>
+        <a href="/" class="btn btn-outline-secondary btn-lg">Back to Shop</a>
+    <!-- NEW Report Product Button -->
+        <% if (user) { %>
+            <button class="btn btn-outline-danger btn-lg" data-bs-toggle="modal" data-bs-target="#reportProductModal">
+                <i class="bi bi-flag"></i> Report
+            </button>
+        <% } %>
+    </div>
+</div>
+
+<!-- Reviews Section -->
+<hr class="my-5">
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <h3 class="mb-4">Customer Reviews</h3>
+
+        <!-- Review Submission Form with Purchase Check -->
+        <% if (user) { %>
+            <% if (hasPurchased) { %>
+                <div class="card mb-5 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Leave a Review</h5>
+                        <form action="/product/<%= product.id %>/review" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Your Rating</label>
+                                <div class="rating-stars">
+                                    <input type="radio" id="star5" name="rating" value="5" required/><label for="star5" title="5 stars"></label>
+                                    <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 stars"></label>
+                                    <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 stars"></label>
+                                    <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2 stars"></label>
+                                    <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"></label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Your Comment</label>
+                                <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Tell us what you think..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Submit Review</button>
+                        </form>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="alert alert-light border">You can only review products you have purchased.</div>
+            <% } %>
+        <% } else { %>
+            <div class="alert alert-info"><a href="/auth/login?redirect=/product/<%= product.id %>">Login</a> to leave a review.</div>
+        <% } %>
+
+        <!-- =================================== -->
+<!-- === NEW REPORT MODALS - START === -->
+<!-- =================================== -->
+
+<!-- Report Product Modal -->
+<div class="modal fade" id="reportProductModal" tabindex="-1" aria-labelledby="reportProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/report/product/<%= product.id %>" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportProductModalLabel">Report Product: <%= product.name %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="productReason" class="form-label">Why are you reporting this product?</label>
+                        <textarea class="form-control" id="productReason" name="reason" rows="4" required placeholder="e.g., Inappropriate content, misleading description..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Report User Modal -->
+<div class="modal fade" id="reportUserModal" tabindex="-1" aria-labelledby="reportUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="reportUserForm" action="" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportUserModalLabel">Report User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+                    <div class="mb-3">
+                        <label for="userReason" class="form-label">Why are you reporting this user?</label>
+                        <textarea class="form-control" id="userReason" name="reason" rows="4" required placeholder="e.g., Spam, harassment, inappropriate comment..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- =================================== -->
+<!-- === NEW REPORT MODALS - END ===== -->
+<!-- =================================== -->
+
+        <!-- List of Existing Reviews -->
+        <% if (reviews.length > 0) { %>
+            <% reviews.forEach(review => { %>
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0"><i class="bi bi-person-circle fs-2 text-muted"></i></div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">
+                            <%= review.username %>
+                            <!-- Verified Purchase Badge -->
+                            <span class="badge bg-success bg-opacity-75 fw-normal ms-2">
+                                <i class="bi bi-patch-check-fill"></i> Verified Purchase
+                            </span>
+                        </h5>
+                        <div class="text-warning mb-2">
+                            <% for(let i = 0; i < review.rating; i++) { %><i class="bi bi-star-fill"></i><% } %><% for(let i = 0; i < 5 - review.rating; i++) { %><i class="bi bi-star"></i><% } %>
+                        </div>
+                        <p><%= review.comment %></p>
+                        <div class="small text-muted">Reviewed on <%= new Date(review.created_at).toLocaleDateString() %></div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p class="text-center text-muted mt-4">Be the first to review this product!</p>
+        <% } %>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const reportUserModal = document.getElementById('reportUserModal');
+    if (reportUserModal) {
+        reportUserModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            const button = event.relatedTarget;
+            // Extract info from data-bs-* attributes
+            const username = button.getAttribute('data-reported-username');
+            const userId = button.getAttribute('data-reported-userid');
+            
+            // Update the modal's content.
+            const modalTitle = reportUserModal.querySelector('.modal-title');
+            const form = reportUserModal.querySelector('#reportUserForm');
+            
+            modalTitle.textContent = 'Report User: ' + username;
+            form.action = '/report/user/' + userId;
+        });
+    }
+});
+</script>

@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">User-Submitted Resources</h1>
+</div>
+<p class="text-muted">Review, approve, or reject resources uploaded by your users. Approved resources can be added to the main shop.</p>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Resource Name</th>
+                        <th>Uploaded By</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th style="width: 280px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (uploads.length === 0) { %>
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">No user resources have been uploaded yet.</td>
+                        </tr>
+                    <% } else { %>
+                        <% uploads.forEach(upload => { %>
+                            <tr>
+                                <!-- Resource Name (with link to file) -->
+                                <td>
+                                    <a href="<%= upload.file_path %>" target="_blank" rel="noopener noreferrer">
+                                        <%= upload.resource_name %> <i class="bi bi-box-arrow-up-right small"></i>
+                                    </a>
+                                </td>
+
+                                <!-- Uploader Info -->
+                                <td><%= upload.username %> (ID: <%= upload.user_id %>)</td>
+                                
+                                <!-- Upload Date -->
+                                <td><%= new Date(upload.uploaded_at).toLocaleDateString() %></td>
+                                
+                                <!-- Status Badge -->
+                                <td>
+                                    <% let statusClass = 'bg-secondary'; %>
+                                    <% if (upload.status === 'Approved') { statusClass = 'bg-success'; } %>
+                                    <% if (upload.status === 'Rejected') { statusClass = 'bg-danger'; } %>
+                                    <span class="badge <%= statusClass %> rounded-pill"><%= upload.status %></span>
+                                </td>
+                                
+                                <!-- Action Buttons -->
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <!-- Form to update the status -->
+                                        <form action="/admin/user-uploads/update-status/<%= upload.id %>" method="POST" class="me-2">
+                                            <div class="input-group input-group-sm">
+                                                <select name="status" class="form-select">
+                                                    <option value="Pending" <%= upload.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                    <option value="Approved" <%= upload.status === 'Approved' ? 'selected' : '' %>>Approve</option>
+                                                    <option value="Rejected" <%= upload.status === 'Rejected' ? 'selected' : '' %>>Reject</option>
+                                                </select>
+                                                <button type="submit" class="btn btn-outline-secondary">Set</button>
+                                            </div>
+                                        </form>
+
+                                        <!-- "Add to Shop" button appears only if approved -->
+                                        <% if (upload.status === 'Approved') { %>
+                                            <form action="/admin/uploads/add-to-shop/<%= upload.id %>" method="POST" onsubmit="return confirm('Are you sure you want to add this resource to the main shop?');">
+                                                <button type="submit" class="btn btn-success btn-sm" title="Add this resource to the main shop">
+                                                    <i class="bi bi-shop"></i> Add to Shop
+                                                </button>
+                                            </form>
+                                        <% } %>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+<!-- Page Header -->
+<div class="container text-center py-5">
+    <h1 class="display-4 fw-bolder">Request a New Resource</h1>
+    <p class="lead text-muted">Looking for something we don't have? Let us know! We are always looking to expand our collection based on your feedback.</p>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    
+                    <!-- Success/Error Messages -->
+                    <% if (locals.success === 'true') { %>
+                        <div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> Thank you! Your request has been submitted successfully.</div>
+                    <% } %>
+                    <% if (locals.success === 'false') { %>
+                        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Sorry, there was an error submitting your request.</div>
+                    <% } %>
+
+                    <form action="/request" method="POST">
+                        <div class="row g-3">
+                            <!-- Your Name -->
+                            <div class="col-md-6 form-floating">
+                                <input type="text" class="form-control" id="requesterName" name="requesterName" placeholder="Your Name" required>
+                                <label for="requesterName" class="ms-2">Your Name</label>
+                            </div>
+                            <!-- Your Email -->
+                            <div class="col-md-6 form-floating">
+                                <input type="email" class="form-control" id="requesterEmail" name="requesterEmail" placeholder="Your Email" required>
+                                <label for="requesterEmail" class="ms-2">Your Email</label>
+                            </div>
+                            <!-- Resource Name -->
+                            <div class="col-12 form-floating">
+                                <input type="text" class="form-control" id="resourceName" name="resourceName" placeholder="e.g., 'Minimalist Wall Clock'" required>
+                                <label for="resourceName" class="ms-2">Name of the Resource/Product</label>
+                            </div>
+                            <!-- Example Link (Optional) -->
+                            <div class="col-12 form-floating">
+                                <input type="url" class="form-control" id="resourceLink" name="resourceLink" placeholder="https://example.com/product-link">
+                                <label for="resourceLink" class="ms-2">Link to an example (optional)</label>
+                            </div>
+                            <!-- Additional Details -->
+                            <div class="col-12 form-floating">
+                                <textarea class="form-control" placeholder="Any extra details..." id="details" name="details" style="height: 120px"></textarea>
+                                <label for="details" class="ms-2">Why do you want this? (optional)</label>
+                            </div>
+                            <!-- Submit Button -->
+                            <div class="col-12 d-grid">
+                                <button class="btn btn-primary btn-lg" type="submit">Submit Request</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

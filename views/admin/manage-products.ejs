@@ -1,0 +1,81 @@
+<!-- views/admin/manage-products.ejs -->
+
+<h2 class="mb-4">Manage Products</h2>
+
+<!-- Add New Product Form -->
+<div class="card mb-5">
+    <div class="card-header">Add New Product</div>
+    <div class="card-body">
+        <form action="/admin/products/add" method="POST" enctype="multipart/form-data">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="category" class="form-label">Category</label>
+                    <input type="text" class="form-control" id="category" name="category" required>
+                </div>
+                <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+
+                <!-- Fields for image and the new purchase link -->
+                <div class="col-md-6">
+                    <label for="productImage" class="form-label">Product Image</label>
+                    <input class="form-control" type="file" id="productImage" name="productImage" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="purchaseLink" class="form-label">Post-Purchase Link (Optional)</label>
+                    <input type="url" class="form-control" id="purchaseLink" name="purchaseLink" placeholder="https://example.com/secret-download">
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Existing Products Table -->
+<h3 class="mb-3">Existing Products</h3>
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Link Provided</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% products.forEach(product => { %>
+                <tr>
+                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>" width="50" class="img-thumbnail">
+                    <td><%= product.name %></td>
+                    <td>$<%= product.price.toFixed(2) %></td>
+                    <td>
+                        <% if (product.purchaseLink) { %>
+                            <span class="badge bg-success">Yes</span>
+                        <% } else { %>
+                            <span class="badge bg-secondary">No</span>
+                        <% } %>
+                    </td>
+                    <td>
+                        <form action="/admin/products/delete/<%= product.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>

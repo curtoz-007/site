@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | Modern E-Shop</title>
+
+    <!-- Third-Party CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+
+    <!-- Custom CSS Styles -->
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Homepage Styles */
+        .hero-split { display: flex; align-items: center; min-height: 80vh; }
+        .hero-image { width: 100%; height: 100%; object-fit: cover; border-radius: .5rem; }
+        .category-card { position: relative; overflow: hidden; border-radius: .5rem; transition: transform .3s ease-in-out; height: 250px; background-size: cover; background-position: center; }
+        .category-card:hover { transform: scale(1.05); }
+        .category-card-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.4); display: flex; align-items: center; justify-content: center; color: white; transition: background-color .3s ease; }
+        .category-card:hover .category-card-overlay { background-color: rgba(0, 0, 0, 0.2); }
+        .category-card h4 { font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); }
+        .newsletter-section { background-color: var(--bs-dark); color: var(--bs-light); }
+
+        /* General UI Styles */
+        .feature-icon { font-size: 3rem; color: var(--bs-primary); }
+        .product-card { transition: transform .2s ease-in-out, box-shadow .2s ease-in-out; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important; }
+        .product-card img { height: 250px; object-fit: cover; }
+
+        /* Admin Dashboard Styles */
+        .border-left-primary { border-left: .25rem solid var(--bs-primary) !important; }
+        .border-left-success { border-left: .25rem solid var(--bs-success) !important; }
+        .border-left-info    { border-left: .25rem solid var(--bs-info) !important; }
+        .border-left-warning { border-left: .25rem solid var(--bs-warning) !important; }
+        .text-gray-300 { color: #dddfeb !important; }
+        .text-gray-800 { color: #5a5c69 !important; }
+        .text-xs { font-size: .7rem; }
+
+        /* Review Star Rating Input Styles */
+        .rating-stars { display: inline-block; }
+        .rating-stars input[type="radio"] { display: none; }
+        .rating-stars label {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            float: right;
+            transition: color 0.2s;
+        }
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label,
+        .rating-stars input[type="radio"]:checked ~ label {
+            color: #ffc107;
+        }
+
+        /* Video Hero Section */
+    .hero-video-section {
+        position: relative;
+        height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        overflow: hidden;
+    }
+    #heroVideo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translateX(-50%) translateY(-50%);
+        z-index: -2;
+    }
+    .hero-video-section::after { /* Video Overlay */
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: -1;
+    }
+
+    /* "Featured In" Logo Bar */
+    .logo-bar {
+        filter: grayscale(100%);
+        opacity: 0.6;
+        transition: all .3s ease;
+    }
+    .logo-bar:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+
+    /* Testimonial Section */
+    .testimonial-card {
+        background-color: #ffffff;
+        border: none;
+    }
+    .testimonial-card .card-body {
+        font-style: italic;
+        color: #555;
+    }
+    .testimonial-card .card-footer {
+        background: none;
+        border-top: none;
+        font-weight: bold;
+    }
+
+    /* Enhanced Product Card */
+    .product-card .card-img-container {
+        position: relative;
+        overflow: hidden;
+    }
+    .product-card .quick-view-btn {
+        position: absolute;
+        bottom: -50px; /* Start hidden */
+        left: 50%;
+        transform: translateX(-50%);
+        transition: bottom 0.3s ease-in-out;
+        z-index: 10;
+    }
+    .product-card:hover .quick-view-btn {
+        bottom: 15px; /* Slide in on hover */
+    }
+    .product-card .card-img-top {
+        transition: transform 0.3s ease;
+    }
+    .product-card:hover .card-img-top {
+        transform: scale(1.05); /* Subtle zoom on hover */
+    }
+    /* Hero Section Enhancements */
+    .hero-avatars {
+        display: flex;
+    }
+    .hero-avatars img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid white;
+        margin-left: -15px;
+    }
+    .hero-avatars img:first-child {
+        margin-left: 0;
+    }
+
+    /* Logo Ticker */
+    @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    .scrolling-logos {
+        display: inline-block;
+        white-space: nowrap;
+        animation: scroll 30s linear infinite;
+    }
+    .scrolling-logos .logo-item {
+        display: inline-block;
+        padding: 0 40px;
+    }
+    .logo-bar {
+        filter: grayscale(100%);
+        opacity: 0.6;
+        transition: all .3s ease;
+    }
+    .logo-bar:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+    
+    /* Enhanced Product Card with "New" Badge */
+    .product-card {
+        position: relative; /* Needed for the badge */
+    }
+    .new-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background-color: var(--bs-primary);
+        color: white;
+        font-size: 0.8em;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 5px;
+        z-index: 10;
+    }
+
+    /* Brand Story Section */
+    .brand-story-img {
+        border-radius: .5rem;
+        object-fit: cover;
+        height: 100%;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar Advertisement -->
+    <div id="announcement-bar" class="bg-primary text-white text-center py-2 position-relative">
+        <strong>WINTER SALE!</strong> Get 20% off all lighting with code: <strong class="user-select-all">WINTER20</strong>
+        <button type="button" class="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-3" aria-label="Close" onclick="document.getElementById('announcement-bar').style.display = 'none';"></button>
+    </div>
+
+    <!-- Dynamically include the correct header based on user role -->
+    <% if (user && user.role === 'admin' && currentPath.startsWith('/admin')) { %>
+        <%- include('../partials/admin-header') %>
+    <% } else { %>
+        <%- include('../partials/header') %>
+    <% } %>
+
+    <!-- Main Content Area where specific page content is injected -->
+    <main class="container py-4">
+        <%- body %>
+    </main>
+
+    <!-- Footer Partial -->
+    <%- include('../partials/footer') %>
+
+    <!-- Promotional Pop-up Modal Advertisement -->
+    <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content overflow-hidden" style="border: none;">
+                <div class="row g-0">
+                    <div class="col-md-6 d-none d-md-block">
+                        <img src="/images/promo-popup.jpg" class="img-fluid" style="height: 100%; object-fit: cover;" alt="Promotion">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="modal-header border-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center px-4 pb-5">
+                            <h2 class="modal-title fw-bolder" id="promoModalLabel">You've Unlocked a Deal!</h2>
+                            <p class="lead my-3">As a special thank you for visiting, enjoy an exclusive offer on your first purchase.</p>
+                            <h3 class="display-4 fw-bold text-primary">15% OFF</h3>
+                            <p class="text-muted">Use code at checkout:</p>
+                            <div class="d-inline-block border border-dashed p-2 fs-4 user-select-all bg-light">WELCOME15</div>
+                            <div class="d-grid mt-4">
+                                <a href="/" class="btn btn-primary btn-lg">Start Shopping</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Third-Party and Custom JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+
+    <!-- Initialization Scripts -->
+    <script>
+        // Initialize AOS (Animate on Scroll)
+        AOS.init({
+            duration: 800,
+            once: true,
+        });
+
+        // Logic to show the promotional modal only once per session
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!sessionStorage.getItem('promoModalShown')) {
+                setTimeout(function() {
+                    const promoModalElement = document.getElementById('promoModal');
+                    if (promoModalElement) {
+                        const myModal = new bootstrap.Modal(promoModalElement);
+                        myModal.show();
+                        sessionStorage.setItem('promoModalShown', 'true');
+                    }
+                }, 2500); // Wait 2.5 seconds before showing
+            }
+        });
+    </script>
+
+</body>
+</html>

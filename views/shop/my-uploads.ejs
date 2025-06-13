@@ -1,0 +1,88 @@
+<div class="container py-5">
+    <div class="row">
+        <!-- Left Side: Upload Form -->
+        <div class="col-lg-5 mb-5">
+            <h2 class="mb-4">Upload Your Resource</h2>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <% if (locals.success === 'true') { %>
+                        <div class="alert alert-success"><i class="bi bi-check-circle-fill me-2"></i>Upload successful! Your resource is pending review.</div>
+                    <% } %>
+                    <% if (locals.success === 'false') { %>
+                        <!-- This is the error message being displayed -->
+                        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Upload failed. Please ensure all fields are filled and try again.</div>
+                    <% } %>
+
+                    <form action="/upload-resource" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="resourceName" class="form-label">Resource Name</label>
+                            <input type="text" class="form-control" id="resourceName" name="resourceName" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea id="description" name="description"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="resourceImage" class="form-label">Preview Image (.jpg, .png)</label>
+                            <!-- Ensure name attribute is exactly "resourceImage" -->
+                            <input class="form-control" type="file" id="resourceImage" name="resourceImage" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resourceFile" class="form-label">Resource File (.zip, .pdf, etc.)</label>
+                            <!-- Ensure name attribute is exactly "resourceFile" -->
+                            <input class="form-control" type="file" id="resourceFile" name="resourceFile" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Upload for Review</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: List of My Uploads -->
+        <div class="col-lg-7">
+            <h2 class="mb-4">My Past Uploads</h2>
+            <div class="list-group">
+                <% if (uploads.length === 0) { %>
+                    <div class="list-group-item text-center text-muted p-4">You have not uploaded any resources yet.</div>
+                <% } else { %>
+                    <% uploads.forEach(upload => { %>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <% if(upload.image_path) { %>
+                                    <img src="<%= upload.image_path %>" alt="<%= upload.resource_name %>" width="50" height="50" class="img-thumbnail me-3 object-fit-cover">
+                                <% } %>
+                                <div>
+                                    <h5 class="mb-1"><%= upload.resource_name %></h5>
+                                    <small class="text-muted">Uploaded on <%= new Date(upload.uploaded_at).toLocaleDateString() %></small>
+                                </div>
+                            </div>
+                            <% let statusClass = 'bg-secondary'; %>
+                            <% if (upload.status === 'Approved') { statusClass = 'bg-success'; } %>
+                            <% if (upload.status === 'Rejected') { statusClass = 'bg-danger'; } %>
+                            <span class="badge <%= statusClass %> rounded-pill"><%= upload.status %></span>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script to initialize the EasyMDE editor -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('description')) {
+        const easyMDE = new EasyMDE({
+            element: document.getElementById('description'),
+            toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview"],
+            spellChecker: false,
+            placeholder: "Tell us about your resource...",
+            minHeight: "150px"
+        });
+    }
+});
+</script>

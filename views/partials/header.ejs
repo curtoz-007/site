@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">Modern E-Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <!-- Main navigation links on the left -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/') ? 'active' : '' %>" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/products') ? 'active' : '' %>" href="/products">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/request') ? 'active' : '' %>" href="/request">Request</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        More
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item <%= (typeof currentPath !== 'undefined' && currentPath === '/faq') ? 'active' : '' %>" href="/faq">FAQ</a></li>
+                        <li><a class="dropdown-item <%= (typeof currentPath !== 'undefined' && currentPath === '/contact') ? 'active' : '' %>" href="/contact">Contact Us</a></li>
+                        <li><a class="dropdown-item <%= (typeof currentPath !== 'undefined' && currentPath === '/shipping-and-returns') ? 'active' : '' %>" href="/shipping-and-returns">Policies</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- User and cart links on the right -->
+            <ul class="navbar-nav">
+                <li class="nav-item position-relative">
+                    <a class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/cart') ? 'active' : '' %>" href="/cart" title="View your shopping cart">
+                        <i class="bi bi-cart-fill fs-5"></i>
+                        <% if (typeof cart !== 'undefined' && cart && cart.totalQty > 0) { %>
+                            <span class="badge rounded-pill bg-primary position-absolute top-0 start-100 translate-middle" style="font-size: 0.6em; padding: .3em .5em;">
+                                <%= cart.totalQty %>
+                            </span>
+                        <% } %>
+                    </a>
+                </li>
+
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <!-- User is logged in -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span class="d-none d-lg-inline-block ms-1"><%= user.name %></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                            <% if (user.role === 'admin') { %>
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-shield-lock-fill me-2"></i>Admin Panel</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            <% } %>
+                            
+                            <!-- FIX #1: Corrected the broken link -->
+                            <li><a class="dropdown-item" href="/my-orders"><i class="bi bi-cloud-arrow-down-fill me-2"></i>My Orders</a></li>
+                            
+                            <li><a class="dropdown-item" href="/my-uploads"><i class="bi bi-cloud-upload-fill me-2"></i>My Uploads</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/auth/logout"><i class="bi bi-box-arrow-left me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                <% } else { %>
+                    <!-- User is a guest -->
+                    <li class="nav-item">
+                        <a class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/auth/login') ? 'active' : '' %>" href="/auth/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/register">Register</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>
